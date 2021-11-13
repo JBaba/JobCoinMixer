@@ -9,19 +9,55 @@ Here is the small diagram of all the chain of events.
 1. `src/main/resources` has `application.properties` for configuration variables
 2. Please run `src/main/java/com/gemini/mixer/GeminiJobCoinMixerApplication.java`
 
-## Send funds instruction
+## How to use swagger API? 
 
-Once app start please look for following messages in CLI/CONSOLE,
+### URL http://localhost:8080/swagger-ui/index.html#/
 
-#### Following message provides user's unused addresses,
+![Diagram](swagger-api.png "a title")
 
-`created random addresses [b5ca3bcb-c305-4604-8d92-8b3c5a735fd2, 3d2ec7db-c1de-4263-ad45-5ef19a41432f]`
+### Use POST submitAddresses to create user submitted addresses
 
-#### Please use following address to deposit some funds,
+User will use `/mixer/submitAddresses/{alpha}/{beta}/{omega}` api endpoint
+to submit some addresses and in response api provides
+address where mixer will setup polling,
 
-`Mixer provided address: d519fe42-59bf-4d1b-a330-c59fed45d1c6`
+API Response:
 
-#### On funds received
+`{"depositAddress":"1e8715f3-fc2e-4581-9d2f-0214006e78bc"}`
+
+### Run GET checkFunds to information on submitted addresses
+
+Please use `/mixer/checkFunds` api endpoint to find out status of funds in
+provided addresses.
+
+API Response:
+
+```json
+[
+  {
+    // mixer address
+    "address": "1e8715f3-fc2e-4581-9d2f-0214006e78bc",
+    "balance": "0",
+    // user's alpha, beta, omega addresses
+    "depositAddresses": [
+      {
+        "address": "aa",
+        "balance": "37.56"
+      },
+      {
+        "address": "ab",
+        "balance": "29.78"
+      },
+      {
+        "address": "ac",
+        "balance": "30.66"
+      }
+    ]
+  }
+]
+```
+
+#### Console activity: On funds received
 
 ```
 ---------------------------------------------------------

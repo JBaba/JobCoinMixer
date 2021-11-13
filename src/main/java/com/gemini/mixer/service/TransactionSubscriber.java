@@ -23,6 +23,10 @@ public class TransactionSubscriber implements ISubscriber {
 
     @Override
     public void subscribe(String address, OnTransactionReceived onTransactionReceived) {
+        if(notificationQueue.containsKey(address)){
+            logger.info(String.format("Warning: For address {%s} we already have polling subscriber", address));
+            return;
+        }
         // current time when we poll chain when we see new bigger date execute onTransactionReceived
         notificationQueue.put(address, onTransactionReceived);
     }
